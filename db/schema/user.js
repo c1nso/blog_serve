@@ -28,19 +28,20 @@ const userSchema = new Schema({
 	}
 })
 // 密码加盐、加密处理
-userSchema.pre('save', (next) => {
-	bcrypt.genSalt(SALT_WORK_FACTOR, (err, salt) => {
+userSchema.pre('save', function(next) {
+	const _this = this;
+	bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
 		if (err) return next(err)
-		bcrypt.hash(this.password, salt, (err, hash) => {
-			if (err) return next(err)
-			this.password = hash
+		bcrypt.hash(_this.password, salt, function(error, hash) {
+			if (error) return next(error)
+			_this.password = hash
 			next()
 		})
 	})
 })
 // 登录密码比对
-userSchema.method = {
-	comparsePassword: (_password, password) => {
+userSchema.methods = {
+	comparsePassword(_password, password) {
 		return new Promise((resolve, reject) => {
 			bcrypt.compare(_password, password, (err, isMatch) => {
 				if(!err) resolve(isMatch)

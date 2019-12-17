@@ -6,7 +6,6 @@ const errMsg = {
 	msg: '失败，请重试'
 }
 router.post('/register', async ctx => {
-	console.log(ctx.request.body)
 	const User = mongoose.model('User')
 	let createUser = new User(ctx.request.body)
 	await createUser.save().then(() => {
@@ -14,7 +13,7 @@ router.post('/register', async ctx => {
 			code: 0,
 			msg:'注册成功'
 		}
-	}).catch(err => {
+	}).catch(() => {
 		ctx.body = errMsg
 	})
 

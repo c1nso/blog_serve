@@ -7,12 +7,14 @@ const api = require('./services/')
 const app = new Koa()
 const router = new Router()
 
+app.use(cors())
+app.use(bodyParser())
 router.use(api.routes())
 // 路由中间件
 app.use(router.routes())
 app.use(router.allowedMethods())
-app.use(bodyParser())
-app.use(cors())
+
+
 ;(async () => {
 	await connect()
 	initSchemas()
