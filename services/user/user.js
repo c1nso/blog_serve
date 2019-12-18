@@ -80,7 +80,7 @@ router.post('/getMailCode', async ctx => {
 			isSend = false;
 			setTimeout(() => {
 				isSend = true;
-			}, 1000 * 3000)
+			}, 1000 * 300)
 		}
 	} catch (e) {
 		ctx.body = {
