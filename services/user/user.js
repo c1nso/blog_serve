@@ -63,7 +63,7 @@ router.post('/login', async ctx => {
 
 router.post('/getMailCode', async ctx => {
 	const { email } = ctx.request.body;
-	const code =  parseInt(Math.random() * 1000000)
+	const code =  Math.floor((Math.random() * 1000000) + 1)
 	if (!isSend) return ctx.body ={code: 1, msg: '请五分钟后重试'}
 	try {
 		const result = await Mail.send(email, code)

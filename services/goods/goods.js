@@ -118,10 +118,17 @@ router.post('/update', async ctx => {
 router.post('/getInfoByPage', async ctx => {
 	const pageSize = ctx.request.body['pageSize'] || 5;
 	const page = ctx.request.body['page'] || 1;
-	await goodsSchema.goodsSchema.find().limit(Number(pageSize)).skip(Number((page -1) * pageSize)).then((data) => {
+	let count = 0;
+	await goodsSchema.goodsSchema.find().then((list) => {
+		count = list.length;
+		return goodsSchema.goodsSchema.find().limit(Number(pageSize)).skip(Number((page -1) * pageSize))
+	}).then((data) => {
+		const  totalPage = Math.ceil(count/pageSize)
 		ctx.body = {
 			code: 0,
-			msg: data
+			msg: data,
+			count,
+			totalPage
 		}
 	}).catch(() => {
 		ctx.body = {
@@ -153,8 +160,8 @@ router.post('/getGoodsListById', async ctx => {
 	try {
 		const {categroySubId, page} = ctx.request.body;
 		const Goods = mongoose.model('Goods')
-		let num = 10 // 每页显示数量
-		let start = (page - 1) * num // 开始位置
+		const num = 10 // 每页显示数量
+		const start = (page - 1) * num // 开始位置
 		// const result = await Goods.find({SUB_ID: categroySubId}).exec()
 		const result = await Goods.find({SUB_ID: categroySubId}).skip(start).limit(num).exec()
 		ctx.body = {
