@@ -48,6 +48,8 @@ router.post('/login', async ctx => {
 			const loginUser = new User()
 			await loginUser.comparsePassword(password, result.password)
 				.then(isMatch => {
+					ctx.session.isLogin = true;
+					ctx.session.name = username;
 					ctx.body = {
 						code: 0,
 						msg: isMatch

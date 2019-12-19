@@ -32,6 +32,7 @@ router.post('/add', async ctx => {
 
 // 查询， 按类别查询
 router.post('/getInfoByType', async ctx => {
+	console.log('ctx.request', ctx.request.header['postman-token'])
 	const {typeId} = ctx.request.body;
 	await goodsSchema.goodsSchema.find({typeId}).then((data) => {
 		ctx.body = {
