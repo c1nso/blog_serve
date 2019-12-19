@@ -19,12 +19,12 @@ const userSchema = new Schema({
 		type: String
 	},
 	createAt: {
-		type: Date,
-		default: Date.now()
+		type: Number,
+		default: Date.now().valueOf()
 	},
 	lastLoginAt: {
-		type: Date,
-		default: Date.now()
+		type: Number,
+		default: Date.now().valueOf()
 	}
 })
 // 密码加盐、加密处理
