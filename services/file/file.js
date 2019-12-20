@@ -4,6 +4,7 @@ const multer = require('@koa/multer');
 const path = require('path')
 const uploadPath = path.join(__dirname, '../../public/uploads')
 let fileName = '';
+let isOverSize = false;
 const storage = multer.diskStorage({
 	destination (req, file, cb) {
 		cb(null, uploadPath)
@@ -19,13 +20,14 @@ const fileFilter =  (ctx, file ,cb) => {
 	// 过滤上传的后缀为txt的文件
 	const filterTypes = ['jpg', 'jpeg', 'png', 'gif', 'webp']
 	const fileType = file.originalname.split('.').splice(-1).toString();
-	if (!filterTypes.includes(fileType)) return cb(null, false)
-	return cb(null, true)
+	if (filterTypes.includes(fileType)) return cb(null, true);
+	return cb(null, false)
+
 }
 //文件上传限制
 const limits = {
 	fields: 10,     // 非文件字段的数量
-	fileSize: 500 * 1024,    // 文件大小 单位 b
+	fileSize: 10 * 1024,    // 文件大小 单位 b
 	// files: 1        // 文件数量
 }
 const upload = multer({ storage, limits, fileFilter})
@@ -39,7 +41,7 @@ const upload = multer({ storage, limits, fileFilter})
 router.post('/upload', async (ctx, next) => {
 	try {
 		const err = await upload.single('upload')(ctx, next)
-		if (err) ctx.body = { code: 1, msg: err };
+		if (err) return ctx.body = { code: 1, msg: err };
 		ctx.body = {
 			code: 0,
 			data: `uploads/${fileName}`,
