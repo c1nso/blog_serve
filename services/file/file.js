@@ -4,7 +4,6 @@ const multer = require('@koa/multer');
 const path = require('path')
 const uploadPath = path.join(__dirname, '../../public/uploads')
 let fileName = '';
-let isOverSize = false;
 const storage = multer.diskStorage({
 	destination (req, file, cb) {
 		cb(null, uploadPath)
